@@ -1,0 +1,27 @@
+# Dataset
+/tmp/ptb-xl/
+# Add your local dataset path here as well, e.g.,
+#/path/to/your/downloaded/dataset/
+
+# Python
+*.pyc
+__pycache__/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# Build artifacts
+/dist/
+/build/
+*.egg-info/
+
+# Saved models (optional)
+/saved_models/
+
+# Virtual environments (optional)
+/venv/
+/env/
