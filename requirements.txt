@@ -1,0 +1,6 @@
+tensorflow>=2.10
+wfdb
+numpy
+pandas
+scipy
+scikit-learn
