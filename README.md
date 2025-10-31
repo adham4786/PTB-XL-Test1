@@ -1,8 +1,26 @@
-1D CNN for Atrial Fibrillation Detection (PTB-XL subset)
+# 1D CNN for Atrial Fibrillation Detection (PTB-XL subset)
 
 This repository contains a training script `train_cnn_ecg.py` that builds a 1D CNN to detect atrial fibrillation (AF) using the PTB-XL dataset files provided under `data/records500/...`.
 
-Quick start
+# Results of the model
+Accuracy: 0.9275229573249817
+AUC: 0.9588406682014465
+Loss: 0.17934221029281616
+
+## Loss (binary cross-entropy)
+What it is: the training objective the model minimizes. For a single example with true label y∈{0,1} and predicted probability p, binary cross-entropy = −[y·log(p) + (1−y)·log(1−p)].
+Range: [0, +∞), lower is better. 0 means perfect confident predictions.
+Interpretation: measures how wrong and how confident predictions are. Unlike accuracy it penalizes being confidently wrong.
+## Accuracy
+What it is: fraction of examples that were classified correctly using a decision threshold (usually 0.5 for binary).
+Range: [0, 1], higher is better.
+Interpretation: easy-to-understand overall correctness, but insensitive to confidence and may be misleading with class imbalance.
+## AUC (Area Under the ROC Curve)
+What it is: measures how well the model ranks positive examples above negatives; computed from model scores over many thresholds (ROC curve).
+Range: [0, 1]. 0.5 = random chance, 1.0 = perfect ranking.
+Interpretation: robust to threshold choice and to some kinds of class imbalance. Higher is better; good discriminative measure.
+
+# Quick start
 
 1. Create a virtual environment and install requirements:
 
@@ -26,20 +44,3 @@ Notes
 
 If you want the code inserted into an existing notebook, tell me which cell, and I will add a compact training cell version.
 
-## Loss (binary cross-entropy)
-What it is: the training objective the model minimizes. For a single example with true label y∈{0,1} and predicted probability p, binary cross-entropy = −[y·log(p) + (1−y)·log(1−p)].
-Range: [0, +∞), lower is better. 0 means perfect confident predictions.
-Interpretation: measures how wrong and how confident predictions are. Unlike accuracy it penalizes being confidently wrong.
-## Accuracy
-What it is: fraction of examples that were classified correctly using a decision threshold (usually 0.5 for binary).
-Range: [0, 1], higher is better.
-Interpretation: easy-to-understand overall correctness, but insensitive to confidence and may be misleading with class imbalance.
-## AUC (Area Under the ROC Curve)
-What it is: measures how well the model ranks positive examples above negatives; computed from model scores over many thresholds (ROC curve).
-Range: [0, 1]. 0.5 = random chance, 1.0 = perfect ranking.
-Interpretation: robust to threshold choice and to some kinds of class imbalance. Higher is better; good discriminative measure.
-
-# Results of the model
-Accuracy: 0.9275229573249817
-AUC: 0.9588406682014465
-Loss: 0.17934221029281616
