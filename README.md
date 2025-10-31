@@ -3,9 +3,11 @@
 This repository contains a training script `train_cnn_ecg.py` that builds a 1D CNN to detect atrial fibrillation (AF) using the PTB-XL dataset files provided under `data/records500/...`.
 
 # Results of the model
-Accuracy: 0.9275229573249817
-AUC: 0.9588406682014465
-Loss: 0.17934221029281616
+Accuracy: 0.928
+
+AUC: 0.959
+
+Loss: 0.179
 
 ## Loss (binary cross-entropy)
 What it is: the training objective the model minimizes. For a single example with true label y∈{0,1} and predicted probability p, binary cross-entropy = −[y·log(p) + (1−y)·log(1−p)].
