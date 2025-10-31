@@ -9,10 +9,6 @@ AUC: 0.959
 
 Loss: 0.179
 
-## Loss (binary cross-entropy)
-What it is: the training objective the model minimizes. For a single example with true label y∈{0,1} and predicted probability p, binary cross-entropy = −[y·log(p) + (1−y)·log(1−p)].
-Range: [0, +∞), lower is better. 0 means perfect confident predictions.
-Interpretation: measures how wrong and how confident predictions are. Unlike accuracy it penalizes being confidently wrong.
 ## Accuracy
 What it is: fraction of examples that were classified correctly using a decision threshold (usually 0.5 for binary).
 Range: [0, 1], higher is better.
@@ -21,6 +17,10 @@ Interpretation: easy-to-understand overall correctness, but insensitive to confi
 What it is: measures how well the model ranks positive examples above negatives; computed from model scores over many thresholds (ROC curve).
 Range: [0, 1]. 0.5 = random chance, 1.0 = perfect ranking.
 Interpretation: robust to threshold choice and to some kinds of class imbalance. Higher is better; good discriminative measure.
+## Loss (binary cross-entropy)
+What it is: the training objective the model minimizes. For a single example with true label y∈{0,1} and predicted probability p, binary cross-entropy = −[y·log(p) + (1−y)·log(1−p)].
+Range: [0, +∞), lower is better. 0 means perfect confident predictions.
+Interpretation: measures how wrong and how confident predictions are. Unlike accuracy it penalizes being confidently wrong.
 
 # Quick start
 
