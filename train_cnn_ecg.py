@@ -8,6 +8,7 @@ from scipy.signal import butter, filtfilt, resample
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
 from tensorflow.keras import layers, models, callbacks
+import json
 
 
 def parse_args():
@@ -115,7 +116,12 @@ def build_model(input_shape):
     outputs = layers.Dense(1, activation='sigmoid')(x)
 
     model = models.Model(inputs, outputs)
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy', tf.keras.metrics.AUC(name='auc')])
+    # Use explicit metric objects to ensure stable metric names across TF versions
+    model.compile(
+        optimizer='adam',
+        loss='binary_crossentropy',
+        metrics=[tf.keras.metrics.BinaryAccuracy(name='accuracy'), tf.keras.metrics.AUC(name='auc')]
+    )
     return model
 
 
@@ -203,15 +209,44 @@ def main():
     cb = [callbacks.ModelCheckpoint(args.save_model, save_best_only=True, monitor='val_auc', mode='max'),
           callbacks.EarlyStopping(patience=5, monitor='val_auc', mode='max', restore_best_weights=True)]
 
-    model.fit(train_gen,
-              epochs=args.epochs,
-              steps_per_epoch=steps_per_epoch,
-              validation_data=val_gen,
-              validation_steps=validation_steps,
-              callbacks=cb)
+    history = model.fit(
+        train_gen,
+        epochs=args.epochs,
+        steps_per_epoch=steps_per_epoch,
+        validation_data=val_gen,
+        validation_steps=validation_steps,
+        callbacks=cb,
+    )
 
     model.save(args.save_model)
     print(f"Saved model to {args.save_model}")
+
+    # training history is a dict: history.history (keys: loss, accuracy, val_loss, val_accuracy, auc, ...)
+    hist_dict = getattr(history, 'history', {})
+    # evaluate on validation set and get a dict of metric -> value (if available)
+    eval_results = None
+    if hasattr(model, 'evaluate'):
+        try:
+            # Keras evaluate can return a dict when return_dict=True
+            eval_results = model.evaluate(val_gen, steps=validation_steps, return_dict=True)
+        except TypeError:
+            # older TF may not support return_dict; fall back to list
+            vals = model.evaluate(val_gen, steps=validation_steps)
+            # map names to values if possible
+            names = model.metrics_names if hasattr(model, 'metrics_names') else []
+            eval_results = dict(zip(names, vals))
+
+    # save history and eval results for inspection
+    out = {
+        'history': hist_dict,
+        'eval_results': eval_results,
+    }
+    try:
+        with open(args.save_model + '.training_history.json', 'w') as f:
+            json.dump(out, f, indent=2, default=lambda o: str(o))
+        print(f"Wrote training history and eval results to {args.save_model}.training_history.json")
+    except Exception as e:
+        print(f"Could not write training history: {e}")
 
 
 if __name__ == '__main__':
